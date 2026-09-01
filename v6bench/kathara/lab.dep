@@ -1,0 +1,8 @@
+dns: gateway
+nat64: dns
+siit: dns
+
+dual_client: dns
+ipv4_client: siit
+ipv6_strict_client: dns
+ipv6_nat64_client: nat64

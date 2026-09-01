@@ -1,0 +1,6 @@
+venv
+*.yaml
+v6bench/kathara/shared/env/*
+v6bench/kathara/shared/results/*
+v6bench/kathara/bind/db.lab
+v6bench/kathara/bind/named.conf.lab-zones

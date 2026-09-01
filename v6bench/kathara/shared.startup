@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# set -e
+
+# cleaning up resolv.conf to force internal dns
+echo > /etc/resolv.conf
+
+# IP Settings based on environment variables
+if [ -n "${IPv6_ADDR}" ]; then
+    ip -6 addr add "${IPv6_ADDR}" dev eth0
+    echo "nameserver 2001:db8:1::53" >> /etc/resolv.conf
+
+    if [ "${IS_GATEWAY}" != "true" ]; then
+        ip -6 route add default via 2001:db8:1::1 dev eth0
+    fi
+fi
+
+if [ -n "${IPv4_ADDR}" ]; then
+    ip addr add "${IPv4_ADDR}" dev eth0
+    echo "nameserver 192.168.0.53" >> /etc/resolv.conf
+
+    if [ "${IS_GATEWAY}" != "true" ]; then
+        ip route add default via 192.168.0.1 dev eth0
+    fi
+fi
+
+# Set eth0 interface to UP
+ip link set eth0 up

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+apt update
+apt install -y kmod
+apt install -y /jool_debfiles/jool-*
+
+sysctl -w net.ipv4.ip_forward=1
+sysctl -w net.ipv6.conf.all.forwarding=1
+
+source /shared/env/test_vars.env
+BASE_IPV6="$(dig "${BASE_DOMAIN}" @8.8.8.8 aaaa +short +cd +do |head -1)" # tags 'cd' and 'do' are included to avoid nat64 resolver
+
+modprobe jool_siit
+jool_siit instance add "siit" --netfilter
+jool_siit -i "siit" eamt add 2001:db8:4::/120 192.168.0.0/24
+jool_siit -i "siit" eamt add 2a00:1450:4001:c21::8b/128 192.168.46.1/32

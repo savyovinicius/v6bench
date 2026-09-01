@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Routing
+sysctl -w net.ipv4.ip_forward=1
+sysctl -w net.ipv6.conf.all.forwarding=1
+
+# NAT64 route
+ip -6 route add 64:ff9b::/96 via 2001:db8:1::64 dev eth0
+
+# SIIT route
+ip route add 192.168.46.0/24 via 192.168.0.46 dev eth0
+ip -6 route add 2001:db8:4::/120 via 2001:db8:1::46 dev eth0
+
+# NAT towards the bridged/external interface
+iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+ip6tables -t nat -A POSTROUTING -o eth1 -j MASQUERADE

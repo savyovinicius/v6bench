@@ -1,0 +1,6 @@
+#!/bin/sh
+
+mv /etc/bindfiles/* /etc/bind/
+rm -rfv /etc/bindfiles
+
+exec /usr/sbin/named -c /etc/bind/named.conf
